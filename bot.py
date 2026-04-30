@@ -112,4 +112,11 @@ async def checkout(q: types.PreCheckoutQuery):
     await bot.answer_pre_checkout_query(q.id, ok=True)
 
 
-@dp.message(lambda m: m
+@dp.message(lambda m: m.successful_payment)
+async def success_payment(message: types.Message):
+    user_id = message.from_user.id
+    paid_until = (datetime.now() + timedelta(days=7)).isoformat()
+
+    update_payment(user_id, paid_until)
+
+    await message.answer("💎 PRO активирован на 7 дней!")
